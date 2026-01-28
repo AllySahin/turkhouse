@@ -6,6 +6,87 @@ import Image from 'next/image';
 import { HiArrowLeft, HiCheckCircle, HiCube, HiHome, HiClock, HiLocationMarker } from 'react-icons/hi';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { useState, useRef } from 'react';
+
+// Image Gallery Component with Zoom
+function ImageGallery({ images, title }: { images: string[], title: string }) {
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [showZoom, setShowZoom] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current) return;
+    
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setZoomPosition({ x, y });
+  };
+
+  const zoomLensSize = 160;
+  const zoomLevel = 2.5;
+
+  return (
+    <div>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Görsel Galeri</h2>
+      
+      {/* Main Image with Zoom */}
+      <motion.div
+        ref={imageRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden mb-4 shadow-xl cursor-crosshair select-none"
+        onMouseEnter={() => setShowZoom(true)}
+        onMouseLeave={() => setShowZoom(false)}
+        onMouseMove={handleMouseMove}
+      >
+        <Image
+          src={images[selectedImage]}
+          alt={title}
+          fill
+          className="object-cover"
+          draggable={false}
+        />
+        
+        {/* Zoom Lens */}
+        {showZoom && imageRef.current && (
+          <div
+            className="absolute rounded-full pointer-events-none border-4 border-white overflow-hidden"
+            style={{
+              left: `${zoomPosition.x - zoomLensSize / 2}px`,
+              top: `${zoomPosition.y - zoomLensSize / 2}px`,
+              width: `${zoomLensSize}px`,
+              height: `${zoomLensSize}px`,
+              zIndex: 10,
+              boxShadow: '0 0 0 2px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.4)',
+              backgroundImage: `url(${images[selectedImage]})`,
+              backgroundSize: `${imageRef.current.clientWidth * zoomLevel}px ${imageRef.current.clientHeight * zoomLevel}px`,
+              backgroundPosition: `${-zoomPosition.x * zoomLevel + zoomLensSize / 2}px ${-zoomPosition.y * zoomLevel + zoomLensSize / 2}px`,
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+        )}
+      </motion.div>
+      
+      {/* Thumbnail Grid */}
+      <div className="grid grid-cols-3 gap-4">
+        {images.map((img, idx) => (
+          <button
+            key={idx}
+            onClick={() => setSelectedImage(idx)}
+            className={`relative h-32 rounded-lg overflow-hidden border-2 transition-all shadow-md hover:shadow-xl ${
+              selectedImage === idx ? 'border-accent scale-105' : 'border-transparent'
+            }`}
+          >
+            <Image src={img} alt={`Gallery ${idx + 1}`} fill className="object-cover" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const projects = [
   {
@@ -16,6 +97,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80',
     ],
     description: 'Modern mimari çizgilere sahip, geniş ve konforlu yaşam alanları sunan lüks prefabrik villa projesi. Doğayla iç içe, enerji verimli ve depreme dayanıklı yapı teknolojisi.',
@@ -51,6 +133,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=1920&q=80',
       'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1920&q=80',
     ],
     description: 'Minimalist yaşam tarzını benimseyen, her detayın özenle düşünüldüğü kompakt ve fonksiyonel tiny house projesi. Doğayla uyumlu, taşınabilir ve sürdürülebilir yaşam alanı.',
@@ -86,6 +169,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80',
       'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80',
+      'https://images.unsplash.com/photo-1545259742-24f9d48b1ddc?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1920&q=80',
     ],
     description: 'Modern iş dünyasının ihtiyaçlarına cevap veren, fonksiyonel ve prestijli prefabrik ofis binası projesi. Geniş çalışma alanları, toplantı odaları ve sosyal alanlar.',
@@ -121,6 +205,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920&q=80',
       'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1600573472556-e636c2f0b87a?w=1920&q=80',
     ],
     description: 'Şantiye çalışanları için konforlu, hijyenik ve güvenli yaşam alanı sunan prefabrik yatakhane projesi. Hızlı kurulum ve taşınabilir yapı.',
@@ -156,6 +241,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1920&q=80',
       'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80',
     ],
     description: 'Doğayla iç içe, sakin ve huzurlu yaşam için tasarlanmış prefabrik bağ evi projesi. Geniş teraslar, şömine ve doğal malzeme kullanımı.',
@@ -191,6 +277,7 @@ const projects = [
     images: [
       'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80',
       'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1920&q=80',
+      'https://images.unsplash.com/photo-1545259742-24f9d48b1ddc?w=1920&q=80', // Kat planı teknik çizimi
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80',
     ],
     description: 'Ürün sergileme ve satış için özel tasarlanmış modern prefabrik showroom projesi. Geniş cam yüzeyler, estetik tasarım ve fonksiyonel alanlar.',
@@ -348,27 +435,7 @@ export default function ProjectDetail() {
               </div>
 
               {/* Image Gallery */}
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">Görsel Galeri</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {project.images.map((img, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="relative h-64 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                      <Image
-                        src={img}
-                        alt={`${project.title} - ${index + 1}`}
-                        fill
-                        className="object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              <ImageGallery images={project.images} title={project.title} />
             </div>
 
             {/* Sidebar */}

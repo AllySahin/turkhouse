@@ -8,38 +8,33 @@ import Image from 'next/image';
 const categories = [
   {
     name: 'Prefabrik',
-    icon: '🏗️',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop',
     description: 'Hızlı ve kaliteli yapılar',
-    subcategories: ['Şantiye', 'Tek Katlı', 'Çift Katlı'],
-    color: 'from-blue-500 to-blue-600'
+    subcategories: ['Şantiye', 'Tek Katlı', 'Çift Katlı']
   },
   {
     name: 'Çelik Ev',
-    icon: '🏡',
+    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&h=300&fit=crop',
     description: 'Modern yaşam alanları',
-    subcategories: ['Tek Katlı', 'Çift Katlı'],
-    color: 'from-green-500 to-green-600'
+    subcategories: ['Tek Katlı', 'Çift Katlı']
   },
   {
     name: 'Konteyner',
-    icon: '📦',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
     description: 'Modüler çözümler',
-    subcategories: [],
-    color: 'from-orange-500 to-orange-600'
+    subcategories: []
   },
   {
     name: 'Tinyhouse',
-    icon: '🏠',
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop',
     description: 'Minimal yaşam konsepti',
-    subcategories: [],
-    color: 'from-purple-500 to-purple-600'
+    subcategories: []
   },
   {
     name: 'Çelik Hangar/Depo',
-    icon: '🏭',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
     description: 'Endüstriyel yapılar',
-    subcategories: [],
-    color: 'from-red-500 to-red-600'
+    subcategories: []
   }
 ];
 
@@ -74,10 +69,10 @@ export default function Navbar() {
   }, []);
 
   const navItems = [
-    { name: 'Ana Sayfa', href: '#' },
-    { name: 'Hakkımızda', href: '#about' },
+    { name: 'Ana Sayfa', href: '/' },
+    { name: 'Hakkımızda', href: '/hakkimizda' },
     { name: 'Hizmetler', href: '#services' },
-    { name: 'Projeler', href: '#projects' },
+    { name: 'Projeler', href: '/projeler' },
     { name: 'İletişim', href: '#contact' },
   ];
 
@@ -147,51 +142,56 @@ export default function Navbar() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[900px] bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden"
+                          className="absolute top-full -left-48 mt-2 w-[600px] bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden"
                         >
-                          <div className="p-8">
-                            <div className="grid grid-cols-5 gap-4 mb-6">
+                          <div className="p-6">
+                            <div className="grid grid-cols-2 gap-4">
                               {categories.map((category, idx) => (
                                 <motion.a
                                   key={category.name}
-                                  href={`#${category.name.toLowerCase().replace(/\s+|\//g, '-')}`}
+                                  href={`/kategoriler/${category.name.toLowerCase().replace(/\s+|\//g, '-')}`}
                                   initial={{ opacity: 0, y: 20 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: idx * 0.05 }}
-                                  whileHover={{ y: -4 }}
-                                  className="group relative"
+                                  whileHover={{ scale: 1.02 }}
+                                  className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                                 >
-                                  <div className={`bg-gradient-to-br ${category.color} rounded-xl p-6 text-white shadow-lg group-hover:shadow-xl transition-all duration-300`}>
-                                    <div className="text-4xl mb-3">{category.icon}</div>
-                                    <h3 className="font-bold text-sm mb-1">{category.name}</h3>
-                                    <p className="text-xs opacity-90">{category.description}</p>
-                                  </div>
-                                  {category.subcategories.length > 0 && (
-                                    <div className="mt-2 space-y-1">
-                                      {category.subcategories.map((sub) => (
-                                        <div
-                                          key={sub}
-                                          className="text-xs text-gray-600 hover:text-accent transition-colors pl-2 border-l-2 border-transparent hover:border-accent"
-                                        >
-                                          {sub}
+                                  <div className="relative h-40 overflow-hidden">
+                                    <Image
+                                      src={category.image}
+                                      alt={category.name}
+                                      fill
+                                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                      <h3 className="font-bold text-base mb-1">{category.name}</h3>
+                                      <p className="text-xs opacity-90 mb-2">{category.description}</p>
+                                      {category.subcategories.length > 0 && (
+                                        <div className="flex flex-wrap gap-1">
+                                          {category.subcategories.map((sub) => (
+                                            <span
+                                              key={sub}
+                                              className="text-xs bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full"
+                                            >
+                                              {sub}
+                                            </span>
+                                          ))}
                                         </div>
-                                      ))}
+                                      )}
                                     </div>
-                                  )}
+                                  </div>
                                 </motion.a>
                               ))}
                             </div>
                             
-                            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                              <div className="text-sm text-gray-600">
-                                <span className="font-semibold text-gray-900">Türkiye'nin</span> en kaliteli prefabrik yapı çözümleri
-                              </div>
+                            <div className="mt-4 pt-4 border-t border-gray-100 text-center">
                               <a
                                 href="#projects"
-                                className="group flex items-center gap-2 bg-accent text-white px-6 py-2.5 rounded-full font-medium hover:bg-accent/90 transition-all duration-300"
+                                className="inline-flex items-center gap-2 text-accent hover:text-accent/80 font-medium text-sm transition-colors"
                               >
-                                Tüm Projeler
-                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                Tüm Projelerimizi Görüntüle
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                               </a>
@@ -224,7 +224,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.95 }}
               className="bg-accent text-white px-6 py-2.5 rounded-full font-medium hover:bg-accent/90 transition-colors duration-300 shadow-md"
             >
-              Teklif Al
+              Katalog
             </motion.button>
           </div>
 

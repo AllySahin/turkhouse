@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { HiCheckCircle } from 'react-icons/hi';
+import Image from 'next/image';
 
 const features = [
   'Depreme dayanıklı sağlam yapı',
@@ -21,8 +22,18 @@ export default function Features() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-blue-50" ref={ref}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden" ref={ref}>
+      {/* Background Image */}
+      <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-5">
+        <Image
+          src="/bg1.png"
+          alt="Background"
+          fill
+          className="object-contain object-right"
+        />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Image */}
           <motion.div
@@ -31,12 +42,17 @@ export default function Features() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden shadow-xl">
-              <div className="bg-gradient-to-br from-primary via-secondary to-accent h-96 flex items-center justify-center">
-                <div className="text-white text-center">
-                  <div className="text-6xl mb-4">🏗️</div>
-                  <p className="text-xl font-semibold">Kaliteli Prefabrik Yapılar</p>
-                </div>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[500px]">
+              <Image
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070"
+                alt="Kaliteli Prefabrik Yapılar"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/40 to-transparent" />
+              <div className="absolute bottom-8 left-8 right-8 text-white">
+                <p className="text-3xl font-bold mb-2">Kaliteli Prefabrik Yapılar</p>
+                <p className="text-lg text-gray-200">Modern teknoloji ve üstün kalite</p>
               </div>
             </div>
             

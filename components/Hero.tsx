@@ -111,28 +111,25 @@ export default function Hero() {
             </motion.button>
           </motion.div>
         </motion.div>
+      </div>
 
-        {/* Floating Elements */}
+      {/* Floating Elements - Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
         <motion.div
           animate={{
-            y: [0, -20, 0],
+            y: [0, 8, 0],
           }}
           transition={{
-            duration: 3,
+            duration: 2,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className="absolute bottom-16 left-1/2 transform -translate-x-1/2"
+          className="flex flex-col items-center gap-1 text-white/90 cursor-pointer"
         >
-          <div className="flex flex-col items-center text-white/80 cursor-pointer drop-shadow-md">
-            <span className="text-sm mb-2">Keşfet</span>
-            <motion.div
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              ↓
-            </motion.div>
+          <div className="text-2xl">
+            ↓
           </div>
+          <span className="text-xs font-semibold tracking-widest">KEŞFET</span>
         </motion.div>
       </div>
 
